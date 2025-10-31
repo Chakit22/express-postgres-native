@@ -1,22 +1,16 @@
 const express = require('express');
-const { Pool } = require('pg');
+const { PrismaClient } = require('@prisma/client');
 
 const app = express();
 app.use(express.json());
 
-// PostgreSQL connection
-const pool = new Pool({
-  user: 'chakitrocks',
-  host: 'localhost',
-  database: 'postgres',
-  port: 5432,
-});
+const prisma = new PrismaClient();
 
 // GET all users
 app.get('/users', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM users');
-    res.json(result.rows);
+    const users = await prisma.users.findMany();
+    res.json(users);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database error' });
@@ -27,11 +21,21 @@ app.get('/users', async (req, res) => {
 app.post('/users', async (req, res) => {
   const { name, email } = req.body;
   try {
-    const result = await pool.query(
-      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-      [name, email]
-    );
-    res.json(result.rows[0]);
+    const user = await prisma.users.create({
+      data: { name, email }
+    });
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+// FETCH ALL POSTS
+app.get('/posts', async (req, res) => {
+  try {
+    const posts = await prisma.posts.findMany();
+    res.json(posts);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Database error' });
