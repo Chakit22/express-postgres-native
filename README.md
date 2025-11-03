@@ -201,6 +201,8 @@ npx prisma db push
 npx prisma generate
 ```
 
+Have a look a this on when to use `npx prisma db push` and when to use `npx prisma migrate dev -name migration_name` : [https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/install-prisma-client-typescript-postgresql#npx-prisma-migrate-dev](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/install-prisma-client-typescript-postgresql#npx-prisma-migrate-dev)
+
 **Flow:**
 ```
 schema.prisma
